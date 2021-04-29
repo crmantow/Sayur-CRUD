@@ -31,6 +31,7 @@ const SignUp = () => {
 
     setEmail("");
     setPassword("");
+    setFullName("");
   };
 
   return (
@@ -49,7 +50,7 @@ const SignUp = () => {
           title="Nama Lengkap"
           placeholder="Masukan nama lengkap anda"
           value={fullName}
-          onClick={(e) => setFullName(e.target.value)}
+          onChange={(e) => setFullName(e.target.value)}
         />
         <TextInput
           title="Email"

@@ -6,6 +6,7 @@ import { useHistory, Link } from "react-router-dom";
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState("");
   const history = useHistory();
 
   const onSubmit = () => {
@@ -22,7 +23,7 @@ const SignIn = () => {
         setPassword("");
       })
       .catch((errors) => {
-        console.log(console.log(errors));
+        setErrors(errors.message);
       });
   };
 
@@ -48,6 +49,7 @@ const SignIn = () => {
           title="Password"
           placeholder="Masukan password anda"
           value={password}
+          type="password"
           onChange={(e) => setPassword(e.target.value)}
         />
         <div className="text-center mt-2">
@@ -61,6 +63,14 @@ const SignIn = () => {
           </Link>
         </div>
       </div>
+      {errors && (
+        <div
+          className="text-center mt-3 container col-3 rounded p-2 shadow"
+          style={{ backgroundColor: "white", color: "red" }}
+        >
+          {errors}
+        </div>
+      )}
     </div>
   );
 };
