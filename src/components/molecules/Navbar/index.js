@@ -9,7 +9,7 @@ const Navbar = () => {
       >
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
-            Navbar
+            Sayur App
           </a>
           <button
             className="navbar-toggler"
@@ -29,11 +29,7 @@ const Navbar = () => {
                   Home
                 </a>
               </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Features
-                </a>
-              </li>
+              <li className="nav-item"></li>
             </ul>
           </div>
         </div>

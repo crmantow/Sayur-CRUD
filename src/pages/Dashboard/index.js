@@ -61,6 +61,10 @@ const Dashboard = () => {
     setSelectedProduct(item);
   };
 
+  const onDelete = (item) => {
+    firebase.database().ref(`products/${item.id}`).remove();
+  };
+
   return (
     <div style={{ backgroundColor: "inherit" }}>
       <Navbar />
@@ -94,6 +98,11 @@ const Dashboard = () => {
           />
           <div className="text-end mt-4">
             <Button buttonText={button} onClick={onSubmit} />
+            {button === "Update" && (
+              <button className="btn btn-warning" onClick={resetForm}>
+                Cancel Update
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -122,7 +131,12 @@ const Dashboard = () => {
                   >
                     Update
                   </button>
-                  <button className="btn btn-danger">Delete</button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => onDelete(item)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
