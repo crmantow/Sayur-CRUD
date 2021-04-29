@@ -1,10 +1,124 @@
-import React from "react";
-import { Navbar } from "../../components";
+import React, { useState, useEffect } from "react";
+import { Button, Navbar, TextInput } from "../../components";
+import firebase from "../../config/Firebase";
 
 const Dashboard = () => {
+  const [namaProduk, setNamaProduk] = useState("");
+  const [jenisProduk, setJenisProduk] = useState("");
+  const [hargaProduk, setHargaProduk] = useState("");
+  const [produk, setProduk] = useState([]);
+
+  useEffect(() => {
+    firebase
+      .database()
+      .ref("products")
+      .on("value", (res) => {
+        if (res.val()) {
+          const rawData = res.val();
+          const productArr = [];
+
+          Object.keys(rawData).map((item) =>
+            productArr.push({
+              id: item,
+              ...rawData[item],
+            })
+          );
+          setProduk(productArr);
+        }
+      });
+  }, []);
+
+  const resetForm = () => {
+    setNamaProduk("");
+    setJenisProduk("");
+    setHargaProduk("");
+  };
+
+  const onSubmit = () => {
+    const data = {
+      namaProduk: namaProduk,
+      jenisProduk: jenisProduk,
+      hargaProduk: hargaProduk,
+    };
+    console.log(data);
+    firebase.database().ref("products").push(data);
+    resetForm();
+  };
+
+  const onUpdateData = (item) => {
+    setNamaProduk(item.namaProduk);
+    setHargaProduk(item.hargaProduk);
+    setJenisProduk(item.namaProduk);
+  };
+
   return (
-    <div>
+    <div style={{ backgroundColor: "inherit" }}>
       <Navbar />
+      <div className="container">
+        <h4 className="mt-5 text-center">Tambah Product</h4>
+        <hr />
+        <div className="container col-6">
+          <TextInput
+            title="Nama Produk"
+            placeholder="Masukan nama produk"
+            value={namaProduk}
+            onChange={(e) => {
+              setNamaProduk(e.target.value);
+            }}
+          />
+          <TextInput
+            title="Jenis Produk"
+            placeholder="Masukan jenis produk"
+            value={jenisProduk}
+            onChange={(e) => {
+              setJenisProduk(e.target.value);
+            }}
+          />
+          <TextInput
+            title="Harga"
+            placeholder="Masukan harga produk"
+            value={hargaProduk}
+            onChange={(e) => {
+              setHargaProduk(e.target.value);
+            }}
+          />
+          <div className="text-end mt-4">
+            <Button buttonText="Tambah Produk" onClick={onSubmit} />
+          </div>
+        </div>
+      </div>
+      <hr />
+      <div className="container mt-5 col-7">
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>Nama Produk</th>
+              <th>Jenis Produk</th>
+              <th>Harga Produk</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {produk.map((item) => (
+              <tr key={item.id}>
+                <td>{item.namaProduk}</td>
+                <td>{item.jenisProduk}</td>
+                <td>{item.hargaProduk}</td>
+                <td>
+                  <button
+                    className="btn btn-success"
+                    style={{ marginRight: 20 }}
+                    onClick={() => onUpdateData(item)}
+                  >
+                    Update
+                  </button>
+                  <button className="btn btn-danger">Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

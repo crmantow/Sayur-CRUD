@@ -4,8 +4,8 @@ const Navbar = () => {
   return (
     <div>
       <nav
-        className="navbar navbar-expand-lg navbar-light"
-        style={{ backgroundColor: "white" }}
+        className="navbar navbar-expand-lg navbar-dark shadow"
+        style={{ backgroundColor: "#05b537" }}
       >
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
