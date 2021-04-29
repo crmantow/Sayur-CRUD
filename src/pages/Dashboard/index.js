@@ -6,6 +6,8 @@ const Dashboard = () => {
   const [namaProduk, setNamaProduk] = useState("");
   const [jenisProduk, setJenisProduk] = useState("");
   const [hargaProduk, setHargaProduk] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState({});
+  const [button, setButton] = useState("Tambah Produk");
   const [produk, setProduk] = useState([]);
 
   useEffect(() => {
@@ -32,6 +34,8 @@ const Dashboard = () => {
     setNamaProduk("");
     setJenisProduk("");
     setHargaProduk("");
+    setButton("Tambah Produk");
+    setSelectedProduct({});
   };
 
   const onSubmit = () => {
@@ -41,14 +45,20 @@ const Dashboard = () => {
       hargaProduk: hargaProduk,
     };
     console.log(data);
-    firebase.database().ref("products").push(data);
+    if (button === "save") {
+      firebase.database().ref("products").push(data);
+    } else {
+      firebase.database().ref(`products/${selectedProduct.id}`).set(data);
+    }
     resetForm();
   };
 
   const onUpdateData = (item) => {
     setNamaProduk(item.namaProduk);
     setHargaProduk(item.hargaProduk);
-    setJenisProduk(item.namaProduk);
+    setJenisProduk(item.jenisProduk);
+    setButton("Update");
+    setSelectedProduct(item);
   };
 
   return (
@@ -83,7 +93,7 @@ const Dashboard = () => {
             }}
           />
           <div className="text-end mt-4">
-            <Button buttonText="Tambah Produk" onClick={onSubmit} />
+            <Button buttonText={button} onClick={onSubmit} />
           </div>
         </div>
       </div>
